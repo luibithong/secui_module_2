@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 메트릭 수집기 간단 테스트 스크립트
 
@@ -21,16 +22,16 @@ def test_cpu_metrics():
     print("\n=== CPU Metrics ===")
     try:
         metrics = get_cpu_metrics()
-        print(f"✓ CPU Usage: {metrics['cpu_percent']:.1f}%")
-        print(f"✓ CPU Count (Logical): {metrics['cpu_count_logical']}")
-        print(f"✓ CPU Count (Physical): {metrics['cpu_count_physical']}")
+        print(f"[OK] CPU Usage: {metrics['cpu_percent']:.1f}%")
+        print(f"[OK] CPU Count (Logical): {metrics['cpu_count_logical']}")
+        print(f"[OK] CPU Count (Physical): {metrics['cpu_count_physical']}")
 
         times = get_cpu_times()
-        print(f"✓ CPU User Time: {times['cpu_time_user']:.2f}s")
-        print(f"✓ CPU System Time: {times['cpu_time_system']:.2f}s")
+        print(f"[OK] CPU User Time: {times['cpu_time_user']:.2f}s")
+        print(f"[OK] CPU System Time: {times['cpu_time_system']:.2f}s")
         return True
     except Exception as e:
-        print(f"✗ CPU metrics failed: {e}")
+        print(f"[FAIL] CPU metrics failed: {e}")
         return False
 
 
@@ -41,13 +42,13 @@ def test_memory_metrics():
         metrics = get_memory_metrics()
         total_gb = metrics['memory_total'] / (1024**3)
         used_gb = metrics['memory_used'] / (1024**3)
-        print(f"✓ Memory Total: {total_gb:.2f} GB")
-        print(f"✓ Memory Used: {used_gb:.2f} GB")
-        print(f"✓ Memory Usage: {metrics['memory_percent']:.1f}%")
-        print(f"✓ Swap Usage: {metrics['swap_percent']:.1f}%")
+        print(f"[OK] Memory Total: {total_gb:.2f} GB")
+        print(f"[OK] Memory Used: {used_gb:.2f} GB")
+        print(f"[OK] Memory Usage: {metrics['memory_percent']:.1f}%")
+        print(f"[OK] Swap Usage: {metrics['swap_percent']:.1f}%")
         return True
     except Exception as e:
-        print(f"✗ Memory metrics failed: {e}")
+        print(f"[FAIL] Memory metrics failed: {e}")
         return False
 
 
@@ -57,7 +58,7 @@ def test_disk_metrics():
     try:
         # Disk Usage
         usage_list = get_disk_usage()
-        print(f"✓ Found {len(usage_list)} disk partition(s)")
+        print(f"[OK] Found {len(usage_list)} disk partition(s)")
         for disk in usage_list[:3]:  # 최대 3개만 출력
             total_gb = disk['total'] / (1024**3)
             used_gb = disk['used'] / (1024**3)
@@ -66,13 +67,13 @@ def test_disk_metrics():
         # Disk I/O
         io_metrics = get_disk_io()
         if io_metrics:
-            print(f"✓ Disk Read: {io_metrics['disk_read_bytes'] / (1024**2):.2f} MB")
-            print(f"✓ Disk Write: {io_metrics['disk_write_bytes'] / (1024**2):.2f} MB")
+            print(f"[OK] Disk Read: {io_metrics['disk_read_bytes'] / (1024**2):.2f} MB")
+            print(f"[OK] Disk Write: {io_metrics['disk_write_bytes'] / (1024**2):.2f} MB")
         else:
-            print("⚠ Disk I/O metrics not available")
+            print("[WARN] Disk I/O metrics not available")
         return True
     except Exception as e:
-        print(f"✗ Disk metrics failed: {e}")
+        print(f"[FAIL] Disk metrics failed: {e}")
         return False
 
 
@@ -83,13 +84,13 @@ def test_network_metrics():
         metrics = get_network_io()
         sent_mb = metrics['network_bytes_sent'] / (1024**2)
         recv_mb = metrics['network_bytes_recv'] / (1024**2)
-        print(f"✓ Network Sent: {sent_mb:.2f} MB")
-        print(f"✓ Network Received: {recv_mb:.2f} MB")
-        print(f"✓ Packets Sent: {metrics['network_packets_sent']}")
-        print(f"✓ Packets Received: {metrics['network_packets_recv']}")
+        print(f"[OK] Network Sent: {sent_mb:.2f} MB")
+        print(f"[OK] Network Received: {recv_mb:.2f} MB")
+        print(f"[OK] Packets Sent: {metrics['network_packets_sent']}")
+        print(f"[OK] Packets Received: {metrics['network_packets_recv']}")
         return True
     except Exception as e:
-        print(f"✗ Network metrics failed: {e}")
+        print(f"[FAIL] Network metrics failed: {e}")
         return False
 
 
@@ -113,16 +114,16 @@ def main():
     total = len(results)
 
     for name, result in results:
-        status = "✓ PASS" if result else "✗ FAIL"
+        status = "[PASS]" if result else "[FAIL]"
         print(f"{name:15} {status}")
 
     print(f"\nTotal: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n✅ All tests passed! Metrics collection is working.")
+        print("\n[SUCCESS] All tests passed! Metrics collection is working.")
         return 0
     else:
-        print(f"\n⚠️  {total - passed} test(s) failed.")
+        print(f"\n[WARNING] {total - passed} test(s) failed.")
         return 1
 
 

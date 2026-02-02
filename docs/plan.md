@@ -5,6 +5,7 @@
 ### 프로젝트 초기 설정
 - [x] 프로젝트 구조 생성
 - [x] CLAUDE.md 작성 (Python 스택)
+- [x] CLAUDE.md 스킬 섹션 추가 (code-review, git-commit)
 - [x] requirements.txt 의존성 정의
 - [x] .env.example 환경 변수 템플릿 작성
 - [x] 설정 파일 작성 (influxdb.yaml, alerts.yaml)
@@ -47,6 +48,7 @@
 - [x] 수집 주기 조정 (CPU/Memory: 1초, Disk I/O: 5초, Disk Usage: 30초)
 - [x] 로깅 설정 및 에러 핸들링 개선
 - [x] 수집 시간 측정 및 성능 모니터링 추가
+- [x] 테스트 출력 형식 개선 (이모지 → 텍스트 기반 표시)
 
 **완료 기준**:
 - ✅ `python test_collector_simple.py` 정상 실행

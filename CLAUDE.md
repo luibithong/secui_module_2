@@ -6,6 +6,10 @@
 
 System Resource Metrics Monitoring - 서버의 시스템 리소스를 실시간으로 수집하고 모니터링하는 시스템
 
+## 스킬
+- 사용자가 python 코드 리뷰를 요청할 때, `skills/code-review/SKILL.md` 파일을 참고하여 코드 리뷰를 수행한다.
+- **Git commit** : 사용자가 git commit을 요청할 때, `skills/git-commit/SKILL.md` 파일을 참고하여 git commit을 수행한다.
+
 **기술 스택**: Python + FastAPI + InfluxDB + Grafana + Prometheus
 
 ## 아키텍처
