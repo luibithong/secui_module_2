@@ -6,6 +6,8 @@
 - [x] 프로젝트 구조 생성
 - [x] CLAUDE.md 작성 (Python 스택)
 - [x] CLAUDE.md 스킬 섹션 추가 (code-review, git-commit)
+- [x] CLAUDE.md C/C++ 코드 리뷰 스킬 추가
+- [x] C/C++ 보안 중심 코드 리뷰 가이드라인 작성
 - [x] requirements.txt 의존성 정의
 - [x] .env.example 환경 변수 템플릿 작성
 - [x] 설정 파일 작성 (influxdb.yaml, alerts.yaml)

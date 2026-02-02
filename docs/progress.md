@@ -173,7 +173,20 @@
 
 ## 최근 완료된 작업
 
-### 2026-02-02
+### 2026-02-02 (오후)
+- **C/C++ 코드 리뷰 가이드라인 작성**
+  - `.claude/skills/c-code-review/SKILL.md` 파일 생성
+  - 위험한 문자열 함수 대체 가이드 (strcpy → strncpy, sprintf → snprintf 등)
+  - 포맷 스트링 취약점 방지
+  - 메모리 안전성 (버퍼 오버플로우, 메모리 누수, Use-after-free 방지)
+  - 정수 오버플로우 방지
+  - 정적/동적 분석 도구 활용 (Valgrind, AddressSanitizer 등)
+
+- **CLAUDE.md 스킬 섹션 확장**
+  - C/C++ 코드 리뷰 스킬 추가
+  - 보안 중심 코드 리뷰 가이드 링크 추가
+
+### 2026-02-02 (오전)
 - **CLAUDE.md 개선**
   - 스킬 섹션 추가 (Python 코드 리뷰, Git commit 자동화)
   - 프로젝트 가이드 체계화
