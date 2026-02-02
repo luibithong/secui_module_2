@@ -25,7 +25,13 @@ async def lifespan(app: FastAPI):
     global influxdb_client
     # 시작 시
     logger.info("Starting FastAPI application")
-    influxdb_client = InfluxDBClient()
+    try:
+        influxdb_client = InfluxDBClient()
+        logger.info("InfluxDB client initialized successfully")
+    except Exception as e:
+        logger.warning(f"Failed to initialize InfluxDB client: {e}")
+        logger.warning("API server will run without InfluxDB connection")
+        influxdb_client = None
     yield
     # 종료 시
     logger.info("Shutting down FastAPI application")

@@ -173,6 +173,38 @@
 
 ## 최근 완료된 작업
 
+### 2026-02-02 (저녁 - Phase 1 완료)
+- **문서화 완료 (5번 과정)**
+  - README.md 업데이트 완료
+    - API 테스트 방법 추가
+    - InfluxDB 선택적 연결 안내 추가
+    - 트러블슈팅 가이드 확장
+    - Windows 환경 설정 가이드 추가
+  - test_api_endpoints.py 스크립트 문서화
+  - 빠른 시작 가이드 개선
+
+**Phase 1 MVP 완료 상태:**
+- ✅ 1. 개발 환경 설정
+- ✅ 2. 메트릭 수집기 구현 및 테스트
+- ✅ 3. REST API 서버 구현 및 테스트
+- ⏳ 4. Grafana 대시보드 설정 (보류 - Docker 미설치)
+- ✅ 5. 통합 테스트 및 문서화 (일부 완료)
+
+### 2026-02-02 (저녁 - API 테스트)
+- **REST API 서버 구현 및 테스트 완료**
+  - FastAPI 서버 성공적으로 시작
+  - 필수 패키지 설치 (uvicorn, fastapi, requests, influxdb-client, prometheus-client 등)
+  - 순환 import 문제 해결 (metrics.py ↔ main.py)
+  - InfluxDB 선택적 연결 지원 구현
+  - API 엔드포인트 테스트 스크립트 작성 (`test_api_endpoints.py`)
+  - 전체 API 테스트 통과 (6/6)
+    - Root Endpoint: ✓
+    - Health Check: ✓
+    - Readiness Check: ✓
+    - Liveness Check: ✓
+    - Current Metrics: ✓ (CPU 8.1%, Memory 35.5%)
+    - Prometheus Metrics: ✓
+
 ### 2026-02-02 (오후)
 - **C/C++ 코드 리뷰 가이드라인 작성**
   - `.claude/skills/c-code-review/SKILL.md` 파일 생성

@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from src.storage.influxdb_client import InfluxDBClient
-from src.api.main import get_influxdb_client
 from src.collector.cpu import get_cpu_metrics, get_cpu_times
 from src.collector.memory import get_memory_metrics
 from src.collector.disk import get_disk_usage, get_disk_io
@@ -47,13 +46,19 @@ async def get_current_metrics():
         raise HTTPException(status_code=500, detail=f"Failed to collect metrics: {str(e)}")
 
 
+def get_db_client():
+    """InfluxDB 클라이언트 의존성 (순환 import 방지)"""
+    from src.api.main import influxdb_client
+    return influxdb_client
+
+
 @router.get("/history")
 async def get_metrics_history(
     metric: str = Query(..., description="메트릭 이름 (cpu, memory, disk_io, network_io)"),
     start_time: Optional[str] = Query("-1h", description="시작 시간 (예: -1h, -30m)"),
     end_time: Optional[str] = Query("now()", description="종료 시간"),
     interval: Optional[str] = Query(None, description="집계 간격 (예: 1m, 5m)"),
-    db_client: InfluxDBClient = Depends(get_influxdb_client),
+    db_client: InfluxDBClient = Depends(get_db_client),
 ):
     """
     히스토리 메트릭 조회
@@ -87,7 +92,7 @@ async def get_metrics_history(
 async def get_metrics_summary(
     metric: str = Query(..., description="메트릭 이름"),
     period: str = Query("-1h", description="조회 기간"),
-    db_client: InfluxDBClient = Depends(get_influxdb_client),
+    db_client: InfluxDBClient = Depends(get_db_client),
 ):
     """
     메트릭 통계 요약 조회 (평균, 최소, 최대, P95)

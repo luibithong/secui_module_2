@@ -131,7 +131,11 @@ INFLUXDB_BUCKET=system-metrics
 python src/collector/main.py
 
 # API 서버 실행 (다른 터미널)
+# 주의: InfluxDB 없이도 실행 가능 (메트릭 조회만 동작)
 uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
+
+# 또는 Python 모듈로 실행
+python -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000
 ```
 
 ## API 엔드포인트
@@ -180,11 +184,31 @@ GET /metrics
 ### 빠른 테스트 (Python만 있으면 실행 가능)
 
 ```bash
-# 메트릭 수집 기능 간단 테스트 (InfluxDB 불필요)
+# 1. 메트릭 수집 기능 간단 테스트 (InfluxDB 불필요)
 python test_collector_simple.py
 
-# 메트릭 수집기 DRY-RUN 모드 실행 (InfluxDB 불필요)
+# 2. 메트릭 수집기 DRY-RUN 모드 실행 (InfluxDB 불필요)
 python run_collector_dryrun.py
+
+# 3. API 엔드포인트 테스트 (서버 실행 후)
+python test_api_endpoints.py
+```
+
+**API 서버 테스트 방법:**
+```bash
+# 1. 터미널 1에서 API 서버 시작
+python -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000
+
+# 2. 터미널 2에서 테스트 실행
+python test_api_endpoints.py
+
+# 예상 결과: 6/6 tests passed
+# - Root Endpoint
+# - Health Check
+# - Readiness Check
+# - Liveness Check
+# - Current Metrics (CPU, Memory)
+# - Prometheus Metrics
 ```
 
 ### pytest를 사용한 전체 테스트
@@ -279,6 +303,14 @@ docker logs influxdb
 curl http://localhost:8086/health
 ```
 
+**참고:** API 서버는 InfluxDB 없이도 실행 가능합니다. InfluxDB 연결 실패 시 경고 메시지를 출력하지만 서버는 정상적으로 시작되며, 실시간 메트릭 조회(`/api/v1/metrics/current`)는 정상 동작합니다.
+
+### 순환 import 에러 (ImportError: cannot import...)
+```bash
+# metrics.py와 main.py 간 순환 import 문제
+# 해결 방법: metrics.py에서 get_db_client() 함수를 로컬 import로 수정
+```
+
 ### 메트릭이 수집되지 않음
 ```bash
 # 수집기 로그 확인
@@ -295,6 +327,18 @@ docker-compose logs api
 
 # 헬스체크
 curl http://localhost:8000/health
+
+# Windows에서 curl 사용 불가 시
+python -c "import requests; print(requests.get('http://localhost:8000/health').json())"
+```
+
+### 필수 패키지 설치 (Windows)
+```bash
+# uvicorn, fastapi 등 필수 패키지 설치
+pip install uvicorn fastapi requests influxdb-client prometheus-client psutil python-dotenv
+
+# 또는 requirements.txt 사용
+pip install -r requirements.txt
 ```
 
 ## 라이선스
