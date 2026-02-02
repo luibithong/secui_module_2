@@ -187,8 +187,33 @@
 - ✅ 1. 개발 환경 설정
 - ✅ 2. 메트릭 수집기 구현 및 테스트
 - ✅ 3. REST API 서버 구현 및 테스트
-- ⏳ 4. Grafana 대시보드 설정 (보류 - Docker 미설치)
-- ✅ 5. 통합 테스트 및 문서화 (일부 완료)
+- ✅ 4. Grafana 대시보드 설정 (설정 파일 완료, Docker 실행 대기)
+- ✅ 5. 통합 테스트 및 문서화
+
+### 2026-02-02 (저녁 - Grafana 대시보드 완성)
+- **Grafana 대시보드 설정 완료 (4번 과정)**
+  - ✅ Grafana provisioning 디렉토리 구조 생성
+    - `grafana/provisioning/datasources/influxdb.yml` (InfluxDB 자동 연동)
+    - `grafana/provisioning/dashboards/dashboard.yml` (대시보드 자동 로드)
+  - ✅ System Metrics 대시보드 JSON 완성
+    - Grafana 10.0+ 호환 전체 스키마 구현
+    - 5개 패널 구성:
+      - Panel 1: CPU Usage (%) - 타임시리즈 차트
+      - Panel 2: Current CPU - 게이지
+      - Panel 3: Current Memory - 게이지
+      - Panel 4: Memory Usage (%) - 타임시리즈 차트
+      - Panel 5: Network I/O (Bytes/sec) - 타임시리즈 차트
+    - Flux 쿼리 최적화 (aggregateWindow, derivative 적용)
+    - 임계값 시각화 (CPU 70%/90%, Memory 80%/95%)
+    - 5초 자동 새로고침, 15분 기본 시간 범위
+    - 범례 테이블 표시 (last, mean, max 값)
+  - ✅ docker-compose.yml 볼륨 마운트 추가
+  - ✅ create_dashboard.py 헬퍼 스크립트 작성
+
+**Docker 설치 후 실행 가능:**
+- `docker-compose up -d` 명령으로 전체 시스템 실행
+- Grafana 자동 설정 및 대시보드 로드 (http://localhost:3000)
+- InfluxDB 데이터소스 자동 연동 완료
 
 ### 2026-02-02 (저녁 - API 테스트)
 - **REST API 서버 구현 및 테스트 완료**

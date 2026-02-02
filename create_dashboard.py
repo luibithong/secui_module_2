@@ -1,0 +1,281 @@
+#!/usr/bin/env python3
+"""Grafana 대시보드 JSON 생성 스크립트"""
+import json
+
+dashboard = {
+    "annotations": {"list": []},
+    "editable": True,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": None,
+    "links": [],
+    "liveNow": True,
+    "panels": [
+        {
+            "datasource": {"type": "influxdb", "uid": "influxdb"},
+            "fieldConfig": {
+                "defaults": {
+                    "color": {"mode": "palette-classic"},
+                    "custom": {
+                        "axisCenteredZero": False,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {"tooltip": False, "viz": False, "legend": False},
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {"type": "linear"},
+                        "showPoints": "never",
+                        "spanNulls": False,
+                        "stacking": {"group": "A", "mode": "none"},
+                        "thresholdsStyle": {"mode": "off"}
+                    },
+                    "mappings": [],
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {"color": "green", "value": None},
+                            {"color": "yellow", "value": 70},
+                            {"color": "red", "value": 90}
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": ["last", "mean", "max"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": True
+                },
+                "tooltip": {"mode": "single", "sort": "none"}
+            },
+            "targets": [
+                {
+                    "datasource": {"type": "influxdb", "uid": "influxdb"},
+                    "query": 'from(bucket: "system-metrics")\\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\\n  |> filter(fn: (r) => r["_measurement"] == "cpu")\\n  |> filter(fn: (r) => r["_field"] == "cpu_percent")\\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\\n  |> yield(name: "mean")',
+                    "refId": "A"
+                }
+            ],
+            "title": "CPU Usage (%)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {"type": "influxdb", "uid": "influxdb"},
+            "fieldConfig": {
+                "defaults": {
+                    "color": {"mode": "thresholds"},
+                    "mappings": [],
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {"color": "green", "value": None},
+                            {"color": "yellow", "value": 70},
+                            {"color": "red", "value": 90}
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0},
+            "id": 2,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {"values": False, "calcs": ["lastNotNull"], "fields": ""},
+                "showThresholdLabels": False,
+                "showThresholdMarkers": True
+            },
+            "pluginVersion": "10.0.0",
+            "targets": [
+                {
+                    "datasource": {"type": "influxdb", "uid": "influxdb"},
+                    "query": 'from(bucket: "system-metrics")\\n  |> range(start: -1m)\\n  |> filter(fn: (r) => r["_measurement"] == "cpu")\\n  |> filter(fn: (r) => r["_field"] == "cpu_percent")\\n  |> last()\\n  |> yield(name: "last")',
+                    "refId": "A"
+                }
+            ],
+            "title": "Current CPU",
+            "type": "gauge"
+        },
+        {
+            "datasource": {"type": "influxdb", "uid": "influxdb"},
+            "fieldConfig": {
+                "defaults": {
+                    "color": {"mode": "thresholds"},
+                    "mappings": [],
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {"color": "green", "value": None},
+                            {"color": "yellow", "value": 80},
+                            {"color": "red", "value": 95}
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0},
+            "id": 3,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {"values": False, "calcs": ["lastNotNull"], "fields": ""},
+                "showThresholdLabels": False,
+                "showThresholdMarkers": True
+            },
+            "pluginVersion": "10.0.0",
+            "targets": [
+                {
+                    "datasource": {"type": "influxdb", "uid": "influxdb"},
+                    "query": 'from(bucket: "system-metrics")\\n  |> range(start: -1m)\\n  |> filter(fn: (r) => r["_measurement"] == "memory")\\n  |> filter(fn: (r) => r["_field"] == "memory_percent")\\n  |> last()\\n  |> yield(name: "last")',
+                    "refId": "A"
+                }
+            ],
+            "title": "Current Memory",
+            "type": "gauge"
+        },
+        {
+            "datasource": {"type": "influxdb", "uid": "influxdb"},
+            "fieldConfig": {
+                "defaults": {
+                    "color": {"mode": "palette-classic"},
+                    "custom": {
+                        "axisCenteredZero": False,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {"tooltip": False, "viz": False, "legend": False},
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {"type": "linear"},
+                        "showPoints": "never",
+                        "spanNulls": False,
+                        "stacking": {"group": "A", "mode": "none"},
+                        "thresholdsStyle": {"mode": "off"}
+                    },
+                    "mappings": [],
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{"color": "green", "value": None}]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": ["last", "mean", "max"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": True
+                },
+                "tooltip": {"mode": "single", "sort": "none"}
+            },
+            "targets": [
+                {
+                    "datasource": {"type": "influxdb", "uid": "influxdb"},
+                    "query": 'from(bucket: "system-metrics")\\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\\n  |> filter(fn: (r) => r["_measurement"] == "memory")\\n  |> filter(fn: (r) => r["_field"] == "memory_percent")\\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\\n  |> yield(name: "mean")',
+                    "refId": "A"
+                }
+            ],
+            "title": "Memory Usage (%)",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {"type": "influxdb", "uid": "influxdb"},
+            "fieldConfig": {
+                "defaults": {
+                    "color": {"mode": "palette-classic"},
+                    "custom": {
+                        "axisCenteredZero": False,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {"tooltip": False, "viz": False, "legend": False},
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {"type": "linear"},
+                        "showPoints": "never",
+                        "spanNulls": False,
+                        "stacking": {"group": "A", "mode": "none"},
+                        "thresholdsStyle": {"mode": "off"}
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [{"color": "green", "value": None}]
+                    },
+                    "unit": "Bps"
+                },
+                "overrides": []
+            },
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+            "id": 5,
+            "options": {
+                "legend": {
+                    "calcs": ["last", "mean"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": True
+                },
+                "tooltip": {"mode": "single", "sort": "none"}
+            },
+            "targets": [
+                {
+                    "datasource": {"type": "influxdb", "uid": "influxdb"},
+                    "query": 'from(bucket: "system-metrics")\\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\\n  |> filter(fn: (r) => r["_measurement"] == "network_io")\\n  |> filter(fn: (r) => r["_field"] == "network_bytes_sent" or r["_field"] == "network_bytes_recv")\\n  |> derivative(unit: 1s, nonNegative: true)\\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\\n  |> yield(name: "mean")',
+                    "refId": "A"
+                }
+            ],
+            "title": "Network I/O (Bytes/sec)",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": ["system", "metrics", "monitoring"],
+    "templating": {"list": []},
+    "time": {"from": "now-15m", "to": "now"},
+    "timepicker": {},
+    "timezone": "",
+    "title": "System Resource Metrics",
+    "uid": "system-metrics",
+    "version": 1,
+    "weekStart": ""
+}
+
+with open("grafana/dashboards/system-metrics-dashboard.json", "w") as f:
+    json.dump(dashboard, f, indent=2)
+
+print("[OK] Grafana dashboard JSON created successfully")
+print("  Location: grafana/dashboards/system-metrics-dashboard.json")

