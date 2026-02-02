@@ -1,0 +1,111 @@
+# 알림 규칙 설정
+alert_rules:
+  # CPU 알림
+  - name: "CPU High Warning"
+    metric: "cpu_percent"
+    condition: ">="
+    threshold: 80
+    duration: 300  # 5분
+    level: "warning"
+    description: "CPU 사용률이 80%를 5분간 초과"
+
+  - name: "CPU Critical"
+    metric: "cpu_percent"
+    condition: ">="
+    threshold: 95
+    duration: 60  # 1분
+    level: "critical"
+    description: "CPU 사용률이 95%를 1분간 초과"
+
+  # 메모리 알림
+  - name: "Memory High Warning"
+    metric: "memory_percent"
+    condition: ">="
+    threshold: 85
+    duration: 0
+    level: "warning"
+    description: "메모리 사용률이 85% 초과"
+
+  - name: "Memory Critical"
+    metric: "memory_percent"
+    condition: ">="
+    threshold: 95
+    duration: 0
+    level: "critical"
+    description: "메모리 사용률이 95% 초과"
+
+  # 디스크 알림
+  - name: "Disk High Warning"
+    metric: "disk_percent"
+    condition: ">="
+    threshold: 80
+    duration: 0
+    level: "warning"
+    description: "디스크 사용률이 80% 초과"
+
+  - name: "Disk Critical"
+    metric: "disk_percent"
+    condition: ">="
+    threshold: 90
+    duration: 0
+    level: "critical"
+    description: "디스크 사용률이 90% 초과"
+
+  # 네트워크 알림
+  - name: "Network Error High"
+    metric: "network_error_rate"
+    condition: ">="
+    threshold: 5
+    duration: 300
+    level: "warning"
+    description: "네트워크 에러율이 5% 이상 5분간 지속"
+
+# 알림 채널 설정
+notification_channels:
+  # 이메일 채널
+  - type: "email"
+    enabled: true
+    config:
+      smtp_host: "smtp.gmail.com"
+      smtp_port: 587
+      from: "alerts@example.com"
+      to:
+        - "admin@example.com"
+        - "ops@example.com"
+
+  # Slack 채널
+  - type: "slack"
+    enabled: true
+    config:
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+      channel: "#alerts"
+      username: "MetricsBot"
+
+  # Webhook 채널
+  - type: "webhook"
+    enabled: false
+    config:
+      url: "https://your-webhook-endpoint.com/alerts"
+      method: "POST"
+      headers:
+        Content-Type: "application/json"
+
+# 알림 그룹 설정
+alert_groups:
+  - name: "critical_alerts"
+    levels:
+      - "critical"
+    channels:
+      - "email"
+      - "slack"
+
+  - name: "warning_alerts"
+    levels:
+      - "warning"
+    channels:
+      - "slack"
+
+# 알림 억제 규칙 (중복 알림 방지)
+alert_suppression:
+  repeat_interval: 3600  # 1시간 동안 같은 알림 반복 안함
+  max_alerts_per_hour: 10

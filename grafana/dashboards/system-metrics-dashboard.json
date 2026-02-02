@@ -1,0 +1,100 @@
+{
+  "dashboard": {
+    "title": "System Resource Metrics",
+    "tags": ["system", "metrics", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "CPU Usage (%)",
+        "type": "graph",
+        "targets": [
+          {
+            "query": "from(bucket: \"system-metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"cpu\") |> filter(fn: (r) => r._field == \"cpu_percent\")",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Memory Usage (%)",
+        "type": "graph",
+        "targets": [
+          {
+            "query": "from(bucket: \"system-metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"memory\") |> filter(fn: (r) => r._field == \"memory_percent\")",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Disk Usage (%)",
+        "type": "graph",
+        "targets": [
+          {
+            "query": "from(bucket: \"system-metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"disk_usage\") |> filter(fn: (r) => r._field == \"percent\")",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "Network I/O (bytes/sec)",
+        "type": "graph",
+        "targets": [
+          {
+            "query": "from(bucket: \"system-metrics\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"network_io\") |> filter(fn: (r) => r._field == \"network_bytes_sent\" or r._field == \"network_bytes_recv\")",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        }
+      },
+      {
+        "id": 5,
+        "title": "System Overview (Single Stat)",
+        "type": "singlestat",
+        "targets": [
+          {
+            "query": "from(bucket: \"system-metrics\") |> range(start: -5m) |> filter(fn: (r) => r._measurement == \"cpu\") |> filter(fn: (r) => r._field == \"cpu_percent\") |> last()",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 16
+        }
+      }
+    ],
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "version": 1
+  }
+}

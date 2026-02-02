@@ -1,0 +1,40 @@
+# InfluxDB 설정
+url: "http://localhost:8086"
+org: "my-org"
+bucket: "system-metrics"
+token: "${INFLUXDB_TOKEN}"
+
+# Retention Policy 설정
+retention_policies:
+  - name: "raw_data"
+    duration: "24h"
+    description: "1초 간격 원시 데이터"
+
+  - name: "5m_aggregate"
+    duration: "7d"
+    description: "5분 집계 데이터"
+
+  - name: "1h_aggregate"
+    duration: "30d"
+    description: "1시간 집계 데이터"
+
+  - name: "1d_aggregate"
+    duration: "365d"
+    description: "1일 집계 데이터"
+
+# 다운샘플링 태스크 설정
+downsample_tasks:
+  - name: "downsample_5m"
+    every: "5m"
+    source_bucket: "system-metrics"
+    destination_bucket: "system-metrics-5m"
+
+  - name: "downsample_1h"
+    every: "1h"
+    source_bucket: "system-metrics-5m"
+    destination_bucket: "system-metrics-1h"
+
+  - name: "downsample_1d"
+    every: "1d"
+    source_bucket: "system-metrics-1h"
+    destination_bucket: "system-metrics-1d"
